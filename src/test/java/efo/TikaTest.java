@@ -4,6 +4,7 @@ package efo;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.junit.Test;
 import org.xml.sax.ContentHandler;
@@ -16,17 +17,17 @@ import java.nio.file.Paths;
 
 public class TikaTest {
     AutoDetectParser autoParser = new AutoDetectParser();
-    ContentHandler handler = new ToXMLContentHandler();
+    ContentHandler contentHandler = new ToXMLContentHandler();
+    BodyContentHandler bodyContentHandler = new BodyContentHandler();
     Metadata metadata = new Metadata();
 
     @Test
     public void testTikaParseEmlWithDocAttachment() throws TikaException, SAXException, IOException {
         String filename="./test-files/new-word.docx";
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(filename);
-        autoParser.parse(stream, handler, metadata);
-
-        System.out.println(handler.toString());
-        Files.write(Paths.get("./result.xhtml"),handler.toString().getBytes());
+        autoParser.parse(stream, contentHandler, metadata);
+        System.out.println(contentHandler.toString());
+        Files.write(Paths.get("./result.xhtml"),contentHandler.toString().getBytes());
     }
 
 }
