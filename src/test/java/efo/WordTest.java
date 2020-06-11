@@ -1,6 +1,7 @@
 package efo;
 
 
+import efo.handlers.MyHandler;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -18,7 +19,7 @@ import java.nio.file.Paths;
 
 public class WordTest {
     AutoDetectParser autoParser = new AutoDetectParser();
-    ContentHandler contentHandler = new ToXMLContentHandler();
+    ToXMLContentHandler contentHandler = new ToXMLContentHandler();
     BodyContentHandler bodyContentHandler = new BodyContentHandler();
     LinkContentHandler linkContentHandler=new LinkContentHandler();
     Metadata metadata = new Metadata();
@@ -28,10 +29,13 @@ public class WordTest {
     @Test
     public void testTikaParseEmlWithDocAttachment_output_html() throws TikaException, SAXException, IOException {
         String filename= "word-with-image-test.doc";
+        MyHandler myHandler=new MyHandler();
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
-        autoParser.parse(stream, contentHandler, metadata);
-        System.out.println(contentHandler.toString());
-        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),contentHandler.toString().getBytes());
+        autoParser.parse(stream, myHandler, metadata);
+        System.out.println(myHandler.toString());
+        System.out.println("-----------------------------------------");
+        System.out.println(myHandler.toString());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),myHandler.toString().getBytes());
     }
 
     @Test
