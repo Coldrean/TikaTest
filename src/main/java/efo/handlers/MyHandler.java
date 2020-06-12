@@ -7,10 +7,7 @@ package efo.handlers;
 
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.tika.sax.ToTextContentHandler;
@@ -116,6 +113,8 @@ public class MyHandler extends ToTextContentHandler {
 
     public void characters(char[] ch, int start, int length) throws SAXException {
         this.lazyCloseStartElement();
+        String tmp=new String(Arrays.copyOfRange(ch,start,start+length));
+        System.out.println(tmp);
         this.writeEscaped(ch, start, start + length, false);
     }
 

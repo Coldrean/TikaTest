@@ -7,6 +7,7 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.LinkContentHandler;
+import org.apache.tika.sax.ToHTMLContentHandler;
 import org.apache.tika.sax.ToXMLContentHandler;
 import org.junit.Test;
 import org.xml.sax.ContentHandler;
@@ -21,25 +22,25 @@ public class WordTest {
     AutoDetectParser autoParser = new AutoDetectParser();
     ToXMLContentHandler contentHandler = new ToXMLContentHandler();
     BodyContentHandler bodyContentHandler = new BodyContentHandler();
-    LinkContentHandler linkContentHandler=new LinkContentHandler();
+    MyHandler myHandler=new MyHandler();
+    ToHTMLContentHandler toHTMLContentHandler=new ToHTMLContentHandler();
     Metadata metadata = new Metadata();
     String inputDir="./test-files";
     String outputDir="./result";
 
     @Test
-    public void testTikaParseEmlWithDocAttachment_output_html() throws TikaException, SAXException, IOException {
+    public void testTikaParseWordWithImage_output_xhtml() throws TikaException, SAXException, IOException {
         String filename= "word-with-image-test.doc";
-        MyHandler myHandler=new MyHandler();
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
-        autoParser.parse(stream, myHandler, metadata);
-        System.out.println(myHandler.toString());
+        autoParser.parse(stream, contentHandler, metadata);
+        System.out.println(contentHandler.toString());
         System.out.println("-----------------------------------------");
-        System.out.println(myHandler.toString());
-        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),myHandler.toString().getBytes());
+        System.out.println(contentHandler.toString());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),contentHandler.toString().getBytes());
     }
 
     @Test
-    public void testTikaParseEmlWithDocAttachment__output_txt() throws TikaException, SAXException, IOException {
+    public void testTikaParseWordWithImage__output_txt() throws TikaException, SAXException, IOException {
         String filename= "word-with-image-test.doc";
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
         autoParser.parse(stream, bodyContentHandler, metadata);
@@ -48,4 +49,22 @@ public class WordTest {
         Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".txt"),bodyContentHandler.toString().getBytes());
     }
 
+    @Test
+    public void testMyHandlerParseWordWithImage_output_txt() throws TikaException, SAXException, IOException {
+        String filename= "word-with-image-test.doc";
+        InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
+        autoParser.parse(stream, myHandler, metadata);
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".htmlx"),myHandler.toString().getBytes());
+    }
+
+    @Test
+    public void testMyHandlerParseWordWithImage_output_html() throws TikaException, SAXException, IOException {
+        String filename= "word-with-image-test.doc";
+        InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
+        autoParser.parse(stream, contentHandler, metadata);
+        System.out.println(contentHandler.toString());
+        System.out.println("-----------------------------------------");
+        System.out.println(contentHandler.toString());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),contentHandler.toString().getBytes());
+    }
 }

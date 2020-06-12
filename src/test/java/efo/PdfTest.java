@@ -1,5 +1,6 @@
 package efo;
 
+import efo.handlers.MyHandler;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -64,6 +65,17 @@ public class PdfTest {
         System.out.println(bodyContentHandler.toString());
         System.out.println(metadata.toString());
         Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".txt"),bodyContentHandler.toString().getBytes());
+    }
+
+    @Test
+    public void testMyHandlerTikaParsePdfWithTable_output_txt() throws TikaException, SAXException, IOException {
+        String filename= "pdf-text-with-table.pdf";
+        MyHandler myHandler=new MyHandler();
+        InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
+        autoParser.parse(stream, myHandler, metadata);
+        System.out.println(myHandler.toString());
+        System.out.println(metadata.toString());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".txt"),myHandler.toString().getBytes());
     }
 
 }
