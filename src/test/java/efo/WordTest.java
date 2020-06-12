@@ -61,10 +61,9 @@ public class WordTest {
     public void testMyHandlerParseWordWithImage_output_html() throws TikaException, SAXException, IOException {
         String filename= "word-with-image-test.doc";
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
-        autoParser.parse(stream, contentHandler, metadata);
-        System.out.println(contentHandler.toString());
+        autoParser.parse(stream, toHTMLContentHandler, metadata);
+        System.out.println(toHTMLContentHandler.toString());
         System.out.println("-----------------------------------------");
-        System.out.println(contentHandler.toString());
-        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),contentHandler.toString().getBytes());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".html"),toHTMLContentHandler.toString().getBytes());
     }
 }
