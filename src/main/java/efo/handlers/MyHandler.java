@@ -11,7 +11,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import org.apache.tika.sax.ToTextContentHandler;
-import org.apache.tika.sax.ToXMLContentHandler;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -98,7 +97,6 @@ public class MyHandler extends ToTextContentHandler {
 
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if (this.inStartElement) {
-            this.write("--endElement--");
             this.write(" />");
             this.inStartElement = false;
         } else {
@@ -115,7 +113,7 @@ public class MyHandler extends ToTextContentHandler {
         this.lazyCloseStartElement();
         String tmp=new String(Arrays.copyOfRange(ch,start,start+length));
         System.out.println(tmp);
-        this.writeEscaped(ch, start, start + length, false);
+        this.writeEscaped(ch, start, start + length, true);
     }
 
     private void lazyCloseStartElement() throws SAXException {
@@ -138,7 +136,6 @@ public class MyHandler extends ToTextContentHandler {
         super.characters(ch, from, to - from);
         this.write('&');
         this.write(entity);
-        this.write("--testEntity--");
         this.write(';');
         return to + 1;
     }

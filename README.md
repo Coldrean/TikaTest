@@ -1,6 +1,22 @@
 # 测试 Tika
 Apache Tika用于文件类型检测和从各种格式的文件中提取文本内容。
 
+Tika的使用方式很简单：
+```
+    public void testTikaParseEmlWithDocAttachment() throws TikaException, SAXException, IOException {
+        String filename="eml-with-doc-attachment-test.eml";
+        AutoDetectParser autoParser = new AutoDetectParser();
+        ContentHandler contentHandler = new ToXMLContentHandler();
+        Metadata metadata = new Metadata();
+        
+        InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
+        autoParser.parse(stream, contentHandler, metadata);
+    }
+```
+其中，autoParser可以自动输入的检测文档的类型，调用合适的解析器去解析文档，将结果写入到Metadata和ContentHandler中，Metadata保存的是输入文档的元信息，
+比如文档的创建人创建时间等等。文档的内容的内容保存在ContentHandler的Writer中。如果想要将文档输出为xhtml格式，可以选用ToXMLContentHandler类型的参数，
+如果只想要输出文档的内容，可以用BodyContentHandler类型的参数。
+
 ## 目前测试来看，Tika主要功能时提取各种文档中的文字，无法提取图片
 
 ## Word

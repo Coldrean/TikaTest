@@ -1,5 +1,6 @@
 package efo;
 
+import efo.handlers.MyHandler;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
@@ -17,9 +18,9 @@ import java.nio.file.Paths;
 
 public class EmlTest {
     AutoDetectParser autoParser = new AutoDetectParser();
-    ContentHandler contentHandler = new ToXMLContentHandler();
+    ContentHandler toXMLContentHandler = new ToXMLContentHandler();
     BodyContentHandler bodyContentHandler = new BodyContentHandler();
-    LinkContentHandler linkContentHandler=new LinkContentHandler();
+    MyHandler myHandler=new MyHandler();
     Metadata metadata = new Metadata();
 
     String inputDir="./test-files";
@@ -29,12 +30,12 @@ public class EmlTest {
         String filename="eml-with-doc-attachment-test.eml";
 
         InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
-        autoParser.parse(stream, contentHandler, metadata);
+        autoParser.parse(stream, toXMLContentHandler, metadata);
         System.out.println(metadata.toString());
         System.out.println("------------------------------");
-        System.out.println(contentHandler.toString());
+        System.out.println(toXMLContentHandler.toString());
 
-        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"),contentHandler.toString().getBytes());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".xhtml"), toXMLContentHandler.toString().getBytes());
     }
 
     @Test
@@ -45,6 +46,16 @@ public class EmlTest {
         System.out.println(bodyContentHandler.toString());
         System.out.println(metadata.toString());
         Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".txt"),bodyContentHandler.toString().getBytes());
+    }
+
+    @Test
+    public void testMyHandlerParseEmlWithDocAttachment__output_txt() throws TikaException, SAXException, IOException {
+        String filename="eml-with-doc-attachment-test.eml";
+        InputStream stream =this.getClass().getClassLoader().getResourceAsStream(Paths.get(inputDir,filename).toString());
+        autoParser.parse(stream, myHandler, metadata);
+        System.out.println(myHandler.toString());
+        System.out.println(metadata.toString());
+        Files.write(Paths.get(outputDir,filename.split("\\.")[0]+".txt"),myHandler.toString().getBytes());
     }
 
 }
