@@ -82,7 +82,7 @@ MIME-version
 ## 输出形式
 可以输出为xhtml文件，可以保留PPT中的表格结构。
 
-#PDF
+# PDF
 ### 可提取的元信息
 标题
 作者
@@ -94,3 +94,7 @@ MIME-version
 
 ## 输出形式
 可以输出为xhtml文件，可以保留word中的表格结构。
+
+# 压缩包
+支持的压缩包格式：
+Tar, AR, ARJ, CPIO, Dump, Zip, 7Zip, Gzip, BZip2, XZ, LZMA, Z and Pack200.
